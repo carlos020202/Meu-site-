@@ -17,6 +17,9 @@
             background-color: #0a192f;
             color: #e6f1ff;
             line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
 
         .particles {
@@ -67,6 +70,33 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 2rem;
+            flex: 1;
+        }
+
+        /* === NAVEGAÇÃO NO RODAPÉ === */
+        .footer-navigation {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(10, 25, 47, 0.8);
+            border-top: 1px solid rgba(100, 255, 218, 0.2);
+        }
+
+        .nav-button {
+            padding: 0.8rem 1.5rem;
+            background: rgba(100, 255, 218, 0.1);
+            border: 1px solid #64ffda;
+            border-radius: 5px;
+            color: #64ffda;
+            text-decoration: none;
+            transition: all 0.3s;
+            margin: 0 1rem;
+            font-weight: 500;
+            display: inline-block;
+        }
+
+        .nav-button:hover {
+            background: rgba(100, 255, 218, 0.3);
+            transform: translateY(-2px);
         }
 
         /* === LINHA DO TEMPO === */
@@ -223,6 +253,16 @@
 
             .card {
                 width: 100%;
+            }
+
+            .footer-navigation {
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-button {
+                margin: 0.5rem 0;
             }
         }
 
@@ -411,8 +451,10 @@
         </div>
     </section>
 
-    <footer>
-        <p>© 2024 História da Engenharia Nuclear - Todos os direitos reservados</p>
+    <!-- Rodapé com navegação -->
+    <footer class="footer-navigation">
+        <a href="index.html" class="nav-button">← Voltar para Página 1</a>
+        <a href="ufrj.html" class="nav-button">Próxima Página →</a>
     </footer>
 
     <script>
