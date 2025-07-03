@@ -11,8 +11,7 @@
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-
-       body { 
+        body {
             background-color: #0a192f;
             color: #e6f1ff;
             line-height: 1.6;
@@ -26,7 +25,7 @@
             height: 100%;
             z-index: -1;
             opacity: 0.3;
-            background: 
+            background:
                 radial-gradient(circle at 20% 30%, rgba(100, 217, 255, 0.8) 0%, transparent 20%),
                 radial-gradient(circle at 80% 70%, rgba(255, 100, 217, 0.8) 0%, transparent 20%);
         }
@@ -61,6 +60,7 @@
             text-decoration: none;
             font-weight: bold;
             transition: transform 0.3s, box-shadow 0.3s;
+            margin: 10px;
         }
 
         .cta-button:hover {
@@ -284,6 +284,12 @@
             content: " →";
         }
 
+        /* NOVO: Estilo para a seção do botão de próxima página */
+        .next-page-section {
+            text-align: center;
+            padding: 3rem 0;
+        }
+
         @keyframes pulse {
             0% { opacity: 1; }
             50% { opacity: 0.8; }
@@ -301,7 +307,6 @@
 </head>
 <body>
     <div class="particles"></div>
-
     <header>
         <h1>Engenharia Nuclear</h1>
         <p class="subtitle">
@@ -507,6 +512,11 @@
         </p>
     </section>
 
+    <!-- NOVA SEÇÃO DO BOTÃO DE PRÓXIMA PÁGINA -->
+    <div class="next-page-section">
+        <a href="pagina2.html" class="cta-button">Próxima Página →</a>
+    </div>
+
     <footer>
         <p>© 2024 Engenharia Nuclear - Energia do Futuro</p>
     </footer>
@@ -549,14 +559,7 @@
             const factElement = document.getElementById('game-fact');
             const factText = document.getElementById('fact-text');
             
-            if (userAnswer === currentProblem.answer) {
-                correctAnswers++;
-                factsShown++;
-                
-                factText.textContent = nuclearFacts[Math.floor(Math.random() * nuclearFacts.length)];
-                factElement.style.display = 'block';
-                
-                document.getElementById('correct-count').tex
+        
                 
                 
   
