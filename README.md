@@ -3,7 +3,7 @@
 Este é um site simples feito com HTML e CSS como parte do meu aprendizado em desenvolvimento web.
 
 🚀 Acesse o site online:
-https://carlos020202.github.io/Meu-site-/
+https://carlos020202.github.io/O-Engenheiro-Nuclear-/
 
 📂 Tecnologias utilizadas:
 - HTML5
