@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz Nuclear</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      background-color: #0a192f;
+      color: #e6f1ff;
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+    
+    .quiz-container {
+      width: 800px;
+      margin: 20px auto;
+      padding: 20px;
+      background: rgba(10, 25, 47, 0.8);
+      border: 3px solid #48aff0;
+      border-radius: 10px;
+    }
+    
+    .question {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      min-height: 80px;
+    }
+    
+    .options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+    
+    .option {
+      padding: 15px;
+      background: rgba(100, 255, 218, 0.1);
+      border: 1px solid #64ffda;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .option:hover {
+      background: rgba(100, 255, 218, 0.3);
+    }
+    
+    .score {
+      font-size: 1.2rem;
+      color: #64ffda;
+      margin-bottom: 20px;
+    }
+    
+    .fact-container {
+      margin-top: 30px;
+      padding: 20px;
+      background: rgba(144, 202, 249, 0.1);
+      border: 1px solid #90caf9;
+      border-radius: 5px;
+      display: none;
+    }
+    
+    .next-btn, .restart-btn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background: rgba(100, 255, 218, 0.2);
+      color: #e6f1ff;
+      border: 1px solid #64ffda;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      display: none;
+    }
+    
+    .menu-button {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 10px 20px;
+      background: rgba(100, 255, 218, 0.2);
+      color: #e6f1ff;
+      border: 1px solid #64ffda;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .feedback {
+      font-size: 1.2rem;
+      margin: 10px 0;
+      min-height: 30px;
+    }
+
+    .correct {
+      color: #64ffda;
+    }
+
+    .incorrect {
+      color: #ff6b6b;
+    }
+  </style>
+</head>
+<body>
+  <h1>Quiz Nuclear</h1>
+  <p>Teste seus conhecimentos sobre Engenharia Nuclear!</p>
+  
+  <div class="quiz-container">
+    <div class="score">Pontuação: <span id="score">0</span></div>
+    <div class="question" id="question"></div>
+    <div class="options" id="options"></div>
+    <div class="feedback" id="feedback"></div>
+    <div class="fact-container" id="factContainer">
+      <h3>Curiosidade Nuclear</h3>
+      <p id="factText"></p>
+    </div>
+    <button class="next-btn" id="nextBtn">Próxima Pergunta</button>
+    <button class="restart-btn" id="restartBtn">Reiniciar Quiz</button>
+  </div>
+  
+  <a href="#" class="menu-button">Menu Principal</a>
+
+  <script>
+    // Elementos do jogo
+    const questionElement = document.getElementById('question');
+    const optionsElement = document.getElementById('options');
+    const scoreElement = document.getElementById('score');
+    const factTextElement = document.getElementById('factText');
+    const factContainer = document.getElementById('factContainer');
+    const nextButton = document.getElementById('nextBtn');
+    const restartButton = document.getElementById('restartBtn');
+    const feedbackElement = document.getElementById('feedback');
+    
+    // Variáveis do jogo
+    let currentQuestion = 0;
+    let score = 0;
+    let answered = false;
+    
+    // Perguntas e curiosidades (em ordem aleatória)
+    const quizData = shuffleArray([
+      {
+        question: "Qual é a principal vantagem da energia nuclear em relação às fontes renováveis?",
+        options: [
+          "Produção contínua independente das condições climáticas",
+          "Não produz nenhum tipo de resíduo",
+          "É a forma mais barata de energia",
+          "Não requer nenhuma segurança especial"
+        ],
+        correct: 0,
+        fact: "As usinas nucleares têm fator de capacidade acima de 90%, enquanto eólicas e solares ficam entre 20-40%."
+      },
+      {
+        question: "Qual elemento é comumente usado como combustível em reatores nucleares?",
+        options: [
+          "Urânio-235",
+          "Carbono-14",
+          "Ferro-56",
+          "Oxigênio-16"
+        ],
+        correct: 0,
+        fact: "O urânio-235 é o único isótopo físsil natural, com meia-vida de 703,8 milhões de anos."
+      },
+      {
+        question: "Onde está localizada a primeira usina nuclear do Brasil?",
+        options: [
+          "Angra dos Reis, RJ",
+          "São Paulo, SP",
+          "Belo Horizonte, MG",
+          "Porto Alegre, RS"
+        ],
+        correct: 0,
+        fact: "Angra 1 entrou em operação em 1985 e produz cerca de 640 MW, suficiente para abastecer 1 milhão de pessoas."
+      },
+      {
+        question: "Qual é a função do moderador em um reator nuclear?",
+        options: [
+          "Reduzir a velocidade dos nêutrons",
+          "Acelerar a fissão nuclear",
+          "Absorver a radiação",
+          "Refrigerar o núcleo do reator"
+        ],
+        correct: 0,
+        fact: "Água pesada (D2O) e grafite são bons moderadores por reduzirem a velocidade dos nêutrons sem absorvê-los."
+      },
+      {
+        question: "Qual instituição brasileira é responsável pelo enriquecimento de urânio?",
+        options: [
+          "INB - Indústrias Nucleares do Brasil",
+          "Petrobras",
+          "Vale",
+          "Eletrobras"
+        ],
+        correct: 0,
+        fact: "A INB opera a Fábrica de Combustível Nuclear em Resende, RJ, com tecnologia 100% nacional de enriquecimento."
+      }
+    ]);
+
+    // Função para embaralhar o array de perguntas
+    function shuffleArray(array) {
+      const newArray = [...array];
+      for (let i = newArray.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+      }
+      return newArray;
+    }
+
+    // Curiosidades adicionais
+    const additionalFacts = [
+      "O Brasil possui a 6ª maior reserva de urânio do mundo!",
+      "Engenheiros nucleares desenvolvem radiofármacos para medicina.",
+      "O reator IEA-R1 no IPEN produz radioisótopos para exames médicos.",
+      "A energia nuclear emite menos CO2 que a energia solar por kWh gerado."
+    ];
+    
+    // Iniciar o jogo
+    function startGame() {
+      currentQuestion = 0;
+      score = 0;
+      scoreElement.textContent = score;
+      feedbackElement.textContent = '';
+      feedbackElement.className = 'feedback';
+      factContainer.style.display = 'none';
+      loadQuestion();
+    }
+    
+    // Carregar pergunta
+    function loadQuestion() {
+      answered = false;
+      const question = quizData[currentQuestion];
+      questionElement.textContent = question.question;
+      
+      optionsElement.innerHTML = '';
+      // Embaralhar as opções de resposta
+      const shuffledOptions = shuffleArray([...question.options]);
+      const correctIndex = shuffledOptions.indexOf(question.options[question.correct]);
+      
+      shuffledOptions.forEach((option, index) => {
+        const button = document.createElement('div');
+        button.classList.add('option');
+        button.textContent = option;
+        button.addEventListener('click', () => selectAnswer(index, correctIndex));
+        optionsElement.appendChild(button);
+      });
+      
+      nextButton.style.display = 'none';
+      restartButton.style.display = 'none';
+      factContainer.style.display = 'none';
+      feedbackElement.textContent = '';
+      feedbackElement.className = 'feedback';
+    }
+    
+    // Selecionar resposta
+    function selectAnswer(selectedIndex, correctIndex) {
+      if (answered) return;
+      answered = true;
+      
+      const options = optionsElement.querySelectorAll('.option');
+      
+      if (selectedIndex === correctIndex) {
+        options[selectedIndex].style.background = 'rgba(0, 255, 0, 0.2)';
+        options[selectedIndex].style.borderColor = 'green';
+        score++;
+        scoreElement.textContent = score;
+        feedbackElement.textContent = 'Parabéns! Resposta correta!';
+        feedbackElement.className = 'feedback correct';
+      } else {
+        options[selectedIndex].style.background = 'rgba(255, 0, 0, 0.2)';
+        options[selectedIndex].style.borderColor = 'red';
+        options[correctIndex].style.background = 'rgba(0, 255, 0, 0.2)';
+        options[correctIndex].style.borderColor = 'green';
+        feedbackElement.textContent = 'Ops! Resposta incorreta!';
+        feedbackElement.className = 'feedback incorrect';
+      }
+      
+      // Mostrar curiosidade da pergunta atual
+      factTextElement.textContent = quizData[currentQuestion].fact;
+      factContainer.style.display = 'block';
+      
+      if (currentQuestion < quizData.length - 1) {
+        nextButton.style.display = 'inline-block';
+      } else {
+        restartButton.style.display = 'inline-block';
+      }
+    }
+    
+    // Próxima pergunta
+    function nextQuestion() {
+      currentQuestion++;
+      loadQuestion();
+    }
+    
+    // Finalizar jogo
+    function endGame() {
+      questionElement.textContent = `Fim do Quiz! Sua pontuação final: ${score}/${quizData.length}`;
+      optionsElement.innerHTML = '';
+      nextButton.style.display = 'none';
+      restartButton.style.display = 'inline-block';
+      
+      // Mostrar curiosidade final
+      factTextElement.textContent = additionalFacts[Math.floor(Math.random() * additionalFacts.length)];
+      factContainer.style.display = 'block';
+    }
+    
+    // Event listeners
+    nextButton.addEventListener('click', nextQuestion);
+    restartButton.addEventListener('click', startGame);
+    
+    // Iniciar o jogo quando a página carregar
+    window.addEventListener('load', startGame);
+  </script>
+</body>
+</html>
